@@ -65,9 +65,9 @@ function addDevice(ip, name, deviceid) {
         <div class="card-body">
             <div id="picker${deviceid}"></div><br>
             <label for="customRange1">Speed</label>
-            <input type="range" class="custom-range" id="customRange1" min="300" onchange="sendRequst('http://${ip}/setspeed?speed='+this.value, ${deviceid})" max="10000">
-            <button type="button" class="btn btn-primary" onclick="sendRequst('http://${ip}/ledoff', ${deviceid})">Off</button>
-            <button type="button" class="btn btn-primary" onclick="sendRequst('http://${ip}/rainbow', ${deviceid})">Rainbow</button>
+            <input type="range" class="custom-range" id="customRange1" min="300" onchange="sendRequst('https://${ip}/setspeed?speed='+this.value, ${deviceid})" max="10000">
+            <button type="button" class="btn btn-primary" onclick="sendRequst('https://${ip}/ledoff', ${deviceid})">Off</button>
+            <button type="button" class="btn btn-primary" onclick="sendRequst('https://${ip}/rainbow', ${deviceid})">Rainbow</button>
         </div>
     </div>
     </div>
@@ -82,7 +82,7 @@ function addDevice(ip, name, deviceid) {
         color: "#f00",
         display: "inline-block"
     }).on('color:change', function (color) {
-        sendRequst(`http://${ip}/setled?r=${color.rgb.r}&g=${color.rgb.g}&b=${color.rgb.b}`, deviceid);
+        sendRequst(`https://${ip}/setled?r=${color.rgb.r}&g=${color.rgb.g}&b=${color.rgb.b}`, deviceid);
     });
 
     ping();
@@ -96,7 +96,7 @@ function addDevice(ip, name, deviceid) {
 
     function ping() {
         var element = document.getElementById("status-" + deviceid);
-        $.get(`http://${ip}/ping`)
+        $.get(`https://${ip}/ping`)
             .done(function (data) {
                 if (data.status == "success" && data.action == "ping") {
                     element.innerHTML = "Online";
