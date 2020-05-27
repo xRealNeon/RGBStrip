@@ -1,0 +1,132 @@
+<div class="container-xl mt-3 jumbotron pageContainer">
+    <div>
+        <h2>Devices</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h2>Add device</h2>
+        <div class="form-inline">
+            <div class="form-group mb-2">
+                <input type="text" id="deviceName" class="form-control" placeholder="Name">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input type="text" id="deviceIP" class="form-control" placeholder="IP">
+            </div>
+            <div class="form-group mb-2 mr-3">
+                <input type="text" id="deviceKey" class="form-control" placeholder="Key">
+            </div>
+            <button type="buttom" class="btn btn-primary mb-2" onclick="createDeviceUI();">Add Device</button>
+        </div>
+    </div>
+    <div>
+        <h2>Clone devices to your phone</h2>
+        <div id="cloneDevices"></div>
+    </div>
+    <div>
+        <h2>Misc</h2>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#clearConfirmModal">Clear Browser
+            Data</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        for (var i = 0; i < devices.length; i++) {
+            var device = devices[i];
+            addRow(device.ip, device.name, i);
+        }
+        if (localStorage.getItem('devices') != null) {
+            console.log(location.protocol + "//" + location.host + location
+                .pathname + "?devices=" + localStorage
+                .getItem(
+                    'devices'));
+            var can = document.createElement('canvas')
+            can.id = "qrcode";
+            document.getElementById("cloneDevices").appendChild(can);
+
+            var qr = new QRious({
+                size: 200,
+                element: document.getElementById("qrcode"),
+                value: location.protocol + "//" + location.host + location
+                    .pathname + "?devices=" + localStorage
+                    .getItem(
+                        'devices')
+            });
+        } else {
+            var can = document.createElement('p')
+            can.innerHTML = "You must first add devices to clone them to your phone.";
+            document.getElementById("cloneDevices").appendChild(can);
+        }
+    });
+
+    function createDeviceUI() {
+        createDevice(document.getElementById('deviceName').value, document.getElementById('deviceIP').value, document
+            .getElementById('deviceKey').value);
+        document.getElementById("tableBody").innerHTML = "";
+        for (var i = 0; i < devices.length; i++) {
+            var device = devices[i];
+            addRow(device.ip, device.name, i);
+        }
+    }
+
+    function addRow(ip, name, id) {
+        var tableRow = `
+                    <td>${name}</td>
+                    <td>${ip}</td>
+                    <td><button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top"
+                            title="Remove" onclick="deleteDevice(${id});"><i class="fas fa-trash-alt"></i></button></td>
+        `;
+        var tableRowDiv = document.createElement('tr');
+        tableRowDiv.innerHTML = tableRow;
+        tableRowDiv.id = "row-" + id;
+        document.getElementById("tableBody").appendChild(tableRowDiv);
+    }
+
+    function deleteDevice(id) {
+        var a = [];
+        document.getElementById("tableBody").innerHTML = "";
+        for (var i = 0; i < devices.length; i++) {
+            var device = devices[i];
+            if (i != id) {
+                a.push(device);
+                addRow(device.ip, device.name, i);
+            }
+        }
+        devices = a;
+        localStorage.setItem('devices', JSON.stringify(devices));
+    }
+</script>
+
+<!-- Clear Confirm Modal -->
+<div class="modal fade" id="clearConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you realy want to clear your browser data?
+                <p class="text-danger">When you clear your browser data all your saved devices are gone!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#clearConfirmModal"
+                    onclick="localStorage.clear();location.reload();">Clear
+                    Browser Data</button>
+            </div>
+        </div>
+    </div>
+</div>
