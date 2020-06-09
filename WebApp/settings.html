@@ -44,9 +44,11 @@
             var device = devices[i];
             addRow(device.ip, device.name, i);
         }
-        var isApp;
+        var isApp = true;
         try {
-            isApp = Android === undefined;
+            if (Android === undefined) {
+                isApp = false;
+            }
         } catch (error) {
             isApp = false;
         }
