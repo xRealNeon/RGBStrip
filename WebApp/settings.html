@@ -44,26 +44,39 @@
             var device = devices[i];
             addRow(device.ip, device.name, i);
         }
-        if (localStorage.getItem('devices') != null) {
-            console.log(location.protocol + "//" + location.host + location
-                .pathname + "?devices=" + localStorage
-                .getItem(
-                    'devices'));
-            var can = document.createElement('canvas')
-            can.id = "qrcode";
-            document.getElementById("cloneDevices").appendChild(can);
-
-            var qr = new QRious({
-                size: 200,
-                element: document.getElementById("qrcode"),
-                value: location.protocol + "//" + location.host + location
+        var isApp;
+        try {
+            isApp = Android === undefined;
+        } catch (error) {
+            isApp = false;
+        }
+        if (!isApp) {
+            if (localStorage.getItem('devices') != null) {
+                console.log(location.protocol + "//" + location.host + location
                     .pathname + "?devices=" + localStorage
                     .getItem(
-                        'devices')
-            });
+                        'devices'));
+                var can = document.createElement('canvas')
+                can.id = "qrcode";
+                document.getElementById("cloneDevices").appendChild(can);
+
+                var qr = new QRious({
+                    size: 200,
+                    element: document.getElementById("qrcode"),
+                    value: location.protocol + "//" + location.host + location
+                        .pathname + "?devices=" + localStorage
+                        .getItem(
+                            'devices')
+                });
+            } else {
+                var can = document.createElement('p')
+                can.innerHTML = "You must first add devices to clone them to your phone.";
+                document.getElementById("cloneDevices").appendChild(can);
+            }
         } else {
             var can = document.createElement('p')
-            can.innerHTML = "You must first add devices to clone them to your phone.";
+            can.innerHTML =
+                '<button type="buttom" class="btn btn-primary mb-2" onclick="Android.openScanner()">Clone Devices</button>';
             document.getElementById("cloneDevices").appendChild(can);
         }
     });

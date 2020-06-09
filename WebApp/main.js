@@ -1,11 +1,10 @@
 var devices = new Array();
 
-const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
 
 function loadConfig() {
-    //console.log(localStorage.getItem('devices'));
-    if (localStorage.getItem('devices') != null || urlParams.has("devices")) {
-        if (localStorage.getItem('devices') != null) {
+    if (localStorage.hasOwnProperty('devices') || urlParams.has("devices")) {
+        if (localStorage.hasOwnProperty('devices')) {
             devices = JSON.parse(localStorage.getItem('devices'));
         }
         if (urlParams.has("devices")) {
