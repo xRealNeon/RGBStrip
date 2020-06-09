@@ -44,14 +44,7 @@
             var device = devices[i];
             addRow(device.ip, device.name, i);
         }
-        var isApp = true;
-        try {
-            if (Android === undefined) {
-                isApp = false;
-            }
-        } catch (error) {
-            isApp = false;
-        }
+
         if (!isApp) {
             if (localStorage.getItem('devices') != null) {
                 console.log(location.protocol + "//" + location.host + location

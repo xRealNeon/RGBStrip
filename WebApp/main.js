@@ -2,6 +2,15 @@ var devices = new Array();
 
 const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
 
+var isApp = true;
+try {
+    if (Android === undefined) {
+        isApp = false;
+    }
+} catch (error) {
+    isApp = false;
+}
+
 function loadConfig() {
     if (localStorage.hasOwnProperty('devices') || urlParams.has("devices")) {
         if (localStorage.hasOwnProperty('devices')) {
