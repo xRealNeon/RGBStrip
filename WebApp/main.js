@@ -46,21 +46,25 @@ function renderDevices() {
     }
 }
 
-function sendRequst(url, deviceid) {
-    console.log(url);
-    $.get(url)
-        .done(function (data) {
-            console.log(data);
-        })
-        .fail(function (data) {
-            $.toast({
-                title: 'Error',
-                content: `An error occurred while contacting <strong>${devices[deviceid].name}</strong>`,
-                type: 'error',
-                delay: 2000,
-                pause_on_hover: false
+function sendRequest(url, deviceid) {
+    if (!isApp) {
+        console.log(url);
+        $.get(url)
+            .done(function (data) {
+                console.log(data);
+            })
+            .fail(function (data) {
+                $.toast({
+                    title: 'Error',
+                    content: `An error occurred while contacting <strong>${devices[deviceid].name}</strong>`,
+                    type: 'error',
+                    delay: 2000,
+                    pause_on_hover: false
+                });
             });
-        });
+    } else {
+        Android.sendRequest(url, devices[deviceid].name);
+    }
 }
 
 function addDevice(ip, name, deviceid) {
@@ -73,9 +77,9 @@ function addDevice(ip, name, deviceid) {
         <div class="card-body">
             <div id="picker${deviceid}"></div><br>
             <label for="customRange1">Speed</label>
-            <input type="range" class="custom-range" id="customRange1" min="300" onchange="sendRequst('https://${ip}/setspeed?speed='+this.value, ${deviceid})" max="10000">
-            <button type="button" class="btn btn-primary" onclick="sendRequst('https://${ip}/ledoff', ${deviceid})">Off</button>
-            <button type="button" class="btn btn-primary" onclick="sendRequst('https://${ip}/rainbow', ${deviceid})">Rainbow</button>
+            <input type="range" class="custom-range" id="customRange1" min="300" onchange="sendRequest('https://${ip}/setspeed?speed='+this.value, ${deviceid})" max="10000">
+            <button type="button" class="btn btn-primary" onclick="sendRequest('https://${ip}/ledoff', ${deviceid})">Off</button>
+            <button type="button" class="btn btn-primary" onclick="sendRequest('https://${ip}/rainbow', ${deviceid})">Rainbow</button>
         </div>
     </div>
     </div>
@@ -90,7 +94,7 @@ function addDevice(ip, name, deviceid) {
         color: "#f00",
         display: "inline-block"
     }).on('color:change', function (color) {
-        sendRequst(`https://${ip}/setled?r=${color.rgb.r}&g=${color.rgb.g}&b=${color.rgb.b}`, deviceid);
+        sendRequest(`https://${ip}/setled?r=${color.rgb.r}&g=${color.rgb.g}&b=${color.rgb.b}`, deviceid);
     });
 
     ping();
