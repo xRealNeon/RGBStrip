@@ -2,7 +2,7 @@
     "name": "RGB Strip",
     "short_name": "RGB Strip",
     "orientation": "portrait",
-    "display": "fullscreen",
+    "display": "standalone",
     "background_color": "#303030",
     "theme_color": "#303030",
     "icons": [{
