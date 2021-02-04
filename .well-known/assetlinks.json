@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "org.js.rgbstrip.twa",
+               "sha256_cert_fingerprints": ["6E:6A:74:C2:AC:8E:A8:8A:86:A3:23:4C:BA:F7:C9:A8:70:15:10:16:D2:22:B5:88:46:CC:A5:A0:2E:F4:8B:71"] }
+}]
